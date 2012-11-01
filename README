@@ -1,0 +1,36 @@
+Global Sequence Alignment - Nathan Tucker
+
+The "guts" of this program (so to speak) are based off the Wikipedia pseudo-code for global sequence alignment:
+http://en.wikipedia.org/wiki/Needleman%E2%80%93Wunsch_algorithm 
+
+The majour difference between that algorithm and my implementation is my use of a single pointer to reference a single block of memory. This means that I don't get to leverage the traditional array subscript, and instead need to use pointer math to access individual element. The formula is:
+dp[ x ][ y ] = dp[ x * strlen( seq2 ) + y ]
+
+I based the Scanner class of the Scanner class for the first project, but has the modification that the Scanner will return a struct containing two strings (id and body). These will then be passed to the GAlign class which will create the dp matrix and then do the traceback, returning the edit distance and global alignment. The GAlign class also contains a dump matrix function that was used during testing to make sure the matrix was generating correctly.
+
+Main is mostly responsible for coordinating the calls to scan and align as well as formatting the return data from the sequence alignment.
+
+The code does not leverage any of the bio* (or I guess seqAn) libraries, and will compile as-is.
+
+To compile the program, either use the supplied Makefile (make), or type the following commands:
+	g++ main.c Sequence.h Scanner.c Scanner.h GAlign.h GAlign.c GAlignResults.h -o global-seq-alignment 2> buildResults
+	
+The compiled executable is already available to avoid recompiling. 
+
+To run the program, use the following format:
+	global-seq-alignment file1 file2 [match] [mismatch] [gap]
+For example,
+	global-seq-alignment file1 file2 1 -1 -1
+
+Make sure to run the "unlimit" command on the GRACE server before parsing longer sequences.
+	
+The two files are required; you can run without providing the other three parametres. Their default values are:
+	match 		= 1
+	mismatch 	= -1
+	gap 		= -1
+
+Conditions:
+
+The programs will not match upper-case to lower-case (so C != c) and assumes the two sequence identifiers have the same length. The latter was stated as something to expect on Piazza.
+
+Assumes valid parametres and properly formatted FASTA files.

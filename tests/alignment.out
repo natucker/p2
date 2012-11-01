@@ -1,0 +1,4 @@
+Edit distance = 7
+Seq1 ATTC-TCAT--TAGGACCGGC
+      ||  ||||  ||| ||| || 
+Seq2 -TTGATCATGGTAG-ACC-GC
